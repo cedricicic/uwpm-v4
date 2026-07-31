@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useRef } from "react";
 import HeroBloom from "./HeroBloom";
-import Frame from "./Frame";
+import Frame, { COLUMNS } from "./Frame";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 
 const LINES = [
@@ -18,12 +18,22 @@ const LINES = [
 const ACCENT = 1;
 
 /**
- * The hero shows five of the six-column field's lines. Dropping the
- * fourth and the far edge leaves the headline block ending on a line
- * that is still drawn, so the type closes the grid instead of running
- * past it.
+ * The hero draws only the left half of the six-column field. The bloom
+ * occupies the right side on its own, so the lines stop before they
+ * start reading as a cage around it.
+ *
+ * The first line runs the section's full height: it sits in the margin
+ * beside the type, so it reads as the block's left edge rather than as
+ * something crossing it.
  */
-const HERO_LINES = [0, 1, 2, 4, 5];
+const HERO_EDGE = [0];
+
+/**
+ * The lines that would cross the headline. Drawn inside it rather than by
+ * <Frame>, so each breaks at the rules above and below the type and
+ * resumes past them — the grid runs around the headline, never through it.
+ */
+const HERO_RAILS = [1, 2];
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -62,9 +72,14 @@ export default function Hero() {
   return (
     <section className="hero" id="home" ref={root}>
       <HeroBloom />
-      <Frame at={HERO_LINES} />
+      <Frame at={HERO_EDGE} />
       <div className="container">
         <h1 className="display hero__title" ref={title}>
+          <span className="hero__rails" aria-hidden="true">
+            {HERO_RAILS.map((i) => (
+              <i key={i} style={{ left: `${(i * 100) / COLUMNS}%` }} />
+            ))}
+          </span>
           <span className="inset">
             {LINES.map((line, i) => (
               <span className="hero__line" key={i}>

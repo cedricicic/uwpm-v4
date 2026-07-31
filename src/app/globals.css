@@ -262,6 +262,10 @@ button {
 --------------------------------------------------------------- */
 
 .hero {
+  /* How much of the container the headline block occupies, as a fraction.
+     The rails divide back through it to recover the full container width,
+     so this is the only place the number is written. */
+  --hero-title-f: 1;
   position: relative;
   min-height: min(100svh, 940px);
   display: flex;
@@ -284,13 +288,75 @@ button {
   height: 100%;
 }
 
-/* The rules close around the headline and the block stops on a column
-   line, so the grid wraps the text rather than running past it. */
+/* The rules close around the headline, but unlike every other rule on the
+   page they run edge to edge instead of stopping at the gutter — the hero
+   is the one block that isn't held inside the grid. */
 .hero__title {
   position: relative;
   z-index: 1;
-  width: 100%;
-  border-block: 1px dashed var(--rule);
+  width: calc(var(--hero-title-f) * 100%);
+}
+
+/* Full-bleed from inside the container: back out the centring offset plus
+   the gutter to reach the viewport's left edge, then span the whole width.
+   The hero clips its own overflow, so this never widens the page. */
+.hero__title::before,
+.hero__title::after {
+  content: "";
+  position: absolute;
+  left: calc(-1 * ((100vw - min(100vw, var(--maxw))) / 2 + var(--gutter)));
+  width: 100vw;
+  height: 0;
+  border-top: 1px dashed var(--rule);
+  pointer-events: none;
+}
+
+.hero__title::before {
+  top: 0;
+}
+
+.hero__title::after {
+  bottom: 0;
+}
+
+/* The column lines live inside the headline so they stay locked to the
+   rules above and below it as the block parallaxes. The box spans the full
+   container even where the headline stops short of it, so the lines land on
+   the same sixths the rest of the page uses. */
+.hero__rails {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: calc(100% / var(--hero-title-f));
+  pointer-events: none;
+}
+
+.hero__rails i {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+}
+
+/* Each line is drawn only outside the headline: one segment running up from
+   the top rule, one running down from the bottom one. The hero clips its own
+   overflow, so a viewport of length is always enough to reach its edges. */
+.hero__rails i::before,
+.hero__rails i::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  height: 100vh;
+  border-left: 1px dashed var(--rule);
+}
+
+.hero__rails i::before {
+  bottom: 100%;
+}
+
+.hero__rails i::after {
+  top: 100%;
 }
 
 .hero__title > span {
@@ -820,8 +886,8 @@ button {
 
 @media (min-width: 900px) {
   /* Headline block ends on the five-sixths column line. */
-  .hero__title {
-    width: 83.3333%;
+  .hero {
+    --hero-title-f: 0.833333;
   }
 
   .row {
