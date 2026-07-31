@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const links = [
@@ -21,8 +22,14 @@ export default function Nav() {
   return (
     <header className="nav" data-stuck={stuck}>
       <div className="container nav__inner">
-        <a className="nav__mark" href="#home">
-          UWPM
+        <a className="nav__mark" href="#home" aria-label="UWPM — home">
+          <Image
+            src="/logos/uwpm-logo.png"
+            alt="UWPM"
+            width={4047}
+            height={1921}
+            priority
+          />
         </a>
         <nav className="nav__links utility" aria-label="Primary">
           {links.map((l) => (

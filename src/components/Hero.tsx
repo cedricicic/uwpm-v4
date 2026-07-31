@@ -1,7 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
-import HeroField from "./HeroField";
+import HeroBloom from "./HeroBloom";
 import Frame from "./Frame";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 
@@ -61,7 +61,7 @@ export default function Hero() {
 
   return (
     <section className="hero" id="home" ref={root}>
-      <HeroField />
+      <HeroBloom />
       <Frame at={HERO_LINES} />
       <div className="container">
         <h1 className="display hero__title" ref={title}>
