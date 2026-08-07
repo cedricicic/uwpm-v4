@@ -9,7 +9,14 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/motion";
  */
 export default function Motion() {
   useLayoutEffect(() => {
-    if (prefersReducedMotion()) return;
+    if (prefersReducedMotion()) {
+      if (typeof document !== "undefined") {
+        document
+          .querySelectorAll(".hero, .barfield, .section, .worked, .footer, .gallery")
+          .forEach((el) => el.classList.add("border-visible"));
+      }
+      return;
+    }
 
     const ctx = gsap.context(() => {
       gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) => {
@@ -30,6 +37,22 @@ export default function Motion() {
           ease: "power4.out",
           stagger: 0.04,
           scrollTrigger: { trigger: group, start: "top 90%", once: true },
+        });
+      });
+
+      // Border growth triggers on scroll (baseten style)
+      const borderTargets = gsap.utils.toArray<HTMLElement>(
+        ".hero, .barfield, .section, .worked, .footer, .gallery, [data-border-reveal]"
+      );
+
+      borderTargets.forEach((target) => {
+        ScrollTrigger.create({
+          trigger: target,
+          start: "top 82%",
+          once: true,
+          onEnter: () => {
+            target.classList.add("border-visible");
+          },
         });
       });
     });

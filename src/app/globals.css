@@ -128,6 +128,15 @@ button {
   bottom: 0;
   width: 0;
   border-left: 1px dashed var(--rule);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1.2s var(--ease) 0.28s;
+  will-change: transform;
+}
+
+.border-visible .frame span,
+.border-visible.frame span {
+  transform: scaleY(1);
 }
 
 /* A mark where each column meets the rule above it. */
@@ -138,7 +147,10 @@ button {
   top: 0;
   left: 0;
   background: var(--rule-strong);
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s, opacity 0.3s var(--ease) 0.5s;
+  will-change: transform, opacity;
 }
 
 .frame span::before {
@@ -149,6 +161,14 @@ button {
 .frame span::after {
   width: 1px;
   height: 7px;
+}
+
+.border-visible .frame span::before,
+.border-visible .frame span::after,
+.border-visible.frame span::before,
+.border-visible.frame span::after {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
 }
 
 /* ---------------------------------------------------------------
@@ -310,6 +330,9 @@ button {
   height: 0;
   border-top: 1px dashed var(--rule);
   pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 1.6s var(--ease) 0.2s;
 }
 
 .hero__title::before {
@@ -319,6 +342,15 @@ button {
 .hero__title::after {
   bottom: 0;
   opacity: 0;
+}
+
+.border-visible .hero__title::before {
+  transform: scaleX(1);
+}
+
+.border-visible .hero__title::after {
+  transform: scaleX(1);
+  opacity: 1;
 }
 
 /* The column lines live inside the headline so they stay locked to the
@@ -355,6 +387,13 @@ button {
 
 .hero__rails i::before {
   bottom: 100%;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 1.8s var(--ease) 0.3s;
+}
+
+.border-visible .hero__rails i::before {
+  transform: scaleY(1);
 }
 
 .hero__rails i::after {
@@ -390,20 +429,66 @@ button {
 .barfield {
   position: relative;
   z-index: 1;
-  border-block: 1px dashed var(--rule);
   overflow: hidden;
   background: var(--paper);
+}
+
+.barfield::before,
+.barfield::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px dashed var(--rule);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.75s var(--ease) 0.2s;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.barfield::before {
+  top: 0;
+}
+
+.barfield::after {
+  bottom: 0;
+}
+
+.border-visible.barfield::before,
+.border-visible.barfield::after,
+.border-visible .barfield::before,
+.border-visible .barfield::after {
+  transform: scaleX(1);
 }
 
 .barfield__row {
   position: relative;
   height: var(--bar-h);
+}
+
+.barfield__row::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0;
   border-bottom: 1px dashed var(--rule);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.65s var(--ease) 0.32s;
+  pointer-events: none;
+}
+
+.border-visible .barfield__row::after {
+  transform: scaleX(1);
 }
 
 /* Kept as a transparent border so every row is the same height. */
-.barfield__row:last-child {
-  border-bottom-color: transparent;
+.barfield__row:last-child::after {
+  display: none;
 }
 
 .bar {
@@ -437,7 +522,26 @@ button {
 .section {
   position: relative;
   padding-bottom: var(--pad-y);
+}
+
+.section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0;
   border-top: 1px dashed var(--rule);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 1.5s var(--ease) 0.25s;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.border-visible.section::before,
+.border-visible .section::before {
+  transform: scaleX(1);
 }
 
 .section__head {
@@ -451,7 +555,36 @@ button {
   z-index: 1;
   display: grid;
   grid-template-columns: 1fr;
-  border-block: 1px dashed var(--rule);
+}
+
+.row::before,
+.row::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px dashed var(--rule);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.75s var(--ease) 0.28s;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.row::before {
+  top: 0;
+}
+
+.row::after {
+  bottom: 0;
+}
+
+.border-visible.row::before,
+.border-visible.row::after,
+.border-visible .row::before,
+.border-visible .row::after {
+  transform: scaleX(1);
 }
 
 .pillar {
@@ -463,8 +596,22 @@ button {
   transition: background 0.45s var(--ease);
 }
 
-.pillar + .pillar {
+.pillar + .pillar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0;
   border-top: 1px dashed var(--rule);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.65s var(--ease) 0.32s;
+  pointer-events: none;
+}
+
+.border-visible .pillar + .pillar::before {
+  transform: scaleX(1);
 }
 
 .pillar::after {
@@ -537,6 +684,17 @@ button {
   pointer-events: none;
   z-index: 0;
   overflow: visible;
+}
+
+.about__canvas-svg g {
+  transform: scale(0);
+  transform-origin: center;
+  transition: transform 2.4s cubic-bezier(0.16, 1, 0.3, 1) 0.35s, opacity 1.6s var(--ease) 0.35s;
+}
+
+.border-visible .about__canvas-svg g,
+.border-visible.about .about__canvas-svg g {
+  transform: scale(1);
 }
 
 .about__curve {
@@ -1006,15 +1164,52 @@ button {
   z-index: 1;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+}
+
+.logos::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0;
   border-top: 1px dashed var(--rule);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 1.6s var(--ease) 0.25s;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.border-visible .logos::before,
+.border-visible.logos::before {
+  transform: scaleX(1);
 }
 
 .logos div {
-  border-bottom: 1px dashed var(--rule);
+  position: relative;
   display: grid;
   place-items: center;
   padding: var(--pad-y) var(--pad-x);
   transition: background 0.35s var(--ease);
+}
+
+.logos div::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-bottom: 1px dashed var(--rule);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.6s var(--ease) 0.32s;
+  pointer-events: none;
+}
+
+.border-visible .logos div::after {
+  transform: scaleX(1);
 }
 
 /* The marks sit desaturated so the wall reads as one texture, and resolve
@@ -1072,7 +1267,26 @@ button {
 
 .footer__body {
   position: relative;
+}
+
+.footer__body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0;
   border-top: 1px dashed var(--rule);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 1.8s var(--ease) 0.25s;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.border-visible .footer__body::before,
+.border-visible.footer__body::before {
+  transform: scaleX(1);
 }
 
 .footer__row {
@@ -1080,11 +1294,47 @@ button {
   z-index: 1;
   display: grid;
   grid-template-columns: 1fr;
+}
+
+.footer__row::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0;
   border-bottom: 1px dashed var(--rule);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.75s var(--ease) 0.28s;
+  pointer-events: none;
+}
+
+.border-visible .footer__row::after,
+.border-visible.footer__row::after {
+  transform: scaleX(1);
 }
 
 .footer__cell + .footer__cell {
+  position: relative;
+}
+
+.footer__cell + .footer__cell::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0;
   border-top: 1px dashed var(--rule);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.6s var(--ease) 0.32s;
+  pointer-events: none;
+}
+
+.border-visible .footer__cell + .footer__cell::before {
+  transform: scaleX(1);
 }
 
 .footer__title {
@@ -1169,8 +1419,8 @@ button {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .pillar + .pillar {
-    border-top: 0;
+  .pillar + .pillar::before {
+    display: none;
   }
 
   .slide {
@@ -1186,8 +1436,8 @@ button {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .footer__cell + .footer__cell {
-    border-top: 0;
+  .footer__cell + .footer__cell::before {
+    display: none;
   }
 }
 
@@ -1207,7 +1457,7 @@ button {
 }
 
 /* ---------------------------------------------------------------
-   Reduced motion
+   Reduced motion & fallback
 --------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
@@ -1217,6 +1467,28 @@ button {
 
   .carousel__track {
     transition: none;
+  }
+
+  .frame span,
+  .frame span::before,
+  .frame span::after,
+  .section::before,
+  .row::before,
+  .row::after,
+  .barfield::before,
+  .barfield::after,
+  .barfield__row::after,
+  .logos::before,
+  .logos div::after,
+  .footer__body::before,
+  .footer__row::after,
+  .hero__title::before,
+  .hero__title::after,
+  .hero__rails i::before,
+  .about__canvas-svg g {
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
   }
 
   *,
