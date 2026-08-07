@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Frame, { lines, without } from "./Frame";
-import Spark from "./Spark";
 
 // Add entries here and the carousel controls activate automatically.
 const events = [
@@ -34,7 +33,6 @@ export default function Events() {
   return (
     <section className="section" id="events">
       <Frame at={lines(3)} />
-      <Spark />
       <div className="container">
         <div className="events__head inset">
           <h2 className="heading" data-reveal>

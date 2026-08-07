@@ -11,7 +11,7 @@ import { gsap, prefersReducedMotion } from "@/lib/motion";
  * server and client to disagree about.
  */
 
-const ROWS = 5;
+const ROWS = 3;
 const PER_ROW = 3;
 const COLS = 28;
 

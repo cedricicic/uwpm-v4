@@ -199,13 +199,11 @@ button {
   height: var(--nav-h);
   display: flex;
   align-items: center;
-  transition: background 0.4s var(--ease), border-color 0.4s var(--ease);
-  border-bottom: 1px solid transparent;
+  transition: background 0.4s var(--ease);
 }
 
 .nav[data-stuck="true"] {
   background: var(--paper);
-  border-bottom-color: var(--rule);
 }
 
 .nav__inner {
@@ -409,28 +407,7 @@ button {
   bottom: 0;
 }
 
-/* Occasional single hexagons that open along a section's rules. */
-.spark {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(100% - var(--gutter) * 2, var(--maxw) - var(--gutter) * 2);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.spark__bar {
-  position: absolute;
-  /* Matches a bar-field row exactly: the row's height less its rule. */
-  height: calc(var(--bar-h) - 1px);
-  margin-block: calc((var(--bar-h) - 1px) / -2);
-  background: var(--signal);
-}
-
-.bar,
-.spark__bar {
+.bar {
   transform: scaleX(0);
   will-change: transform;
   clip-path: polygon(
@@ -474,6 +451,9 @@ button {
 
 .pillar {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   padding: var(--pad-y) var(--pad-x);
   transition: background 0.45s var(--ease);
 }
@@ -503,12 +483,254 @@ button {
   background: rgba(255, 77, 86, 0.04);
 }
 
+.pillar__header {
+  margin-bottom: 24px;
+}
+
 .pillar__name {
   font-size: clamp(1.35rem, 2.1vw, 1.9rem);
   font-weight: 600;
   font-variation-settings: "wdth" 104;
   letter-spacing: -0.018em;
   margin-bottom: 12px;
+}
+
+/* ---------------------------------------------------------------
+   What We Do — Vertical S-Curve Layout & Graphics
+--------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------
+   What We Do — Canvas Layout matching Figma (1880 x 1760)
+--------------------------------------------------------------- */
+
+.about__canvas-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-block: 20px 60px;
+  overflow: visible;
+}
+
+.about__canvas {
+  position: relative;
+  width: 100%;
+  /* Matches 1880 x 1760 viewBox ratio */
+  aspect-ratio: 1880 / 1760;
+  overflow: visible;
+}
+
+.about__canvas-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+}
+
+.about__curve {
+  stroke-dasharray: 10 10;
+  animation: dashPulse 24s linear infinite;
+}
+
+@keyframes dashPulse {
+  to {
+    stroke-dashoffset: -200;
+  }
+}
+
+.about__star {
+  transform-box: fill-box;
+  transform-origin: center center;
+  animation: floatStar 4s ease-in-out infinite alternate;
+}
+
+@keyframes floatStar {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  100% {
+    transform: translateY(-8px) rotate(20deg) scale(1.08);
+  }
+}
+
+.about__hexagon {
+  transform-box: fill-box;
+  transform-origin: center center;
+  animation: floatHex 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes floatHex {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    transform: translateY(-3px) scale(1.02);
+  }
+}
+
+.about__node {
+  position: absolute;
+  z-index: 1;
+}
+
+/* TOP LEFT: Polaroid 1 */
+.about__node--polaroid-1 {
+  left: 19.8%;
+  top: 0%;
+  width: 23.8%;
+}
+
+/* TOP RIGHT: Educate Text */
+.about__node--educate-text {
+  right: 14%;
+  top: 3.2%;
+  text-align: right;
+  max-width: 40%;
+}
+
+/* MIDDLE LEFT: Exposure Text */
+.about__node--exposure-text {
+  left: 14%;
+  top: 41.5%;
+  text-align: left;
+  max-width: 40%;
+}
+
+/* MIDDLE RIGHT: Polaroid 2 */
+.about__node--polaroid-2 {
+  left: 57.3%;
+  top: 29.4%;
+  width: 24.9%;
+}
+
+/* BOTTOM LEFT: Polaroid 3 */
+.about__node--polaroid-3 {
+  left: 19.6%;
+  top: 61.7%;
+  width: 21.7%;
+}
+
+/* BOTTOM RIGHT: Network Text */
+.about__node--network-text {
+  right: 14%;
+  top: 70.6%;
+  text-align: right;
+  max-width: 40%;
+}
+
+.about__heading {
+  font-size: clamp(2rem, 3.8vw, 4.8rem);
+  font-weight: 600;
+  font-variation-settings: "wdth" 108;
+  letter-spacing: -0.025em;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+
+.about__description {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-size: clamp(1rem, 1.8vw, 2rem);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 767px) {
+  .about__canvas {
+    aspect-ratio: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+  .about__canvas-svg {
+    display: none;
+  }
+  .about__node {
+    position: relative;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+}
+
+.polaroid--tilt-left {
+  transform: rotate(-10deg);
+}
+
+.polaroid--tilt-right {
+  transform: rotate(13deg);
+}
+
+.polaroid--tilt-slight {
+  transform: rotate(-5deg);
+}
+
+/* ---------------------------------------------------------------
+   Polaroid Photo Frames
+--------------------------------------------------------------- */
+
+.polaroid {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  margin: 16px auto 8px;
+  padding: 14px 14px 18px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  box-shadow:
+    0 12px 28px -4px rgba(0, 0, 0, 0.14),
+    0 3px 8px -1px rgba(0, 0, 0, 0.08);
+  transform-origin: center center;
+  transition:
+    transform 0.4s var(--ease),
+    box-shadow 0.4s var(--ease);
+  will-change: transform, box-shadow;
+  cursor: pointer;
+}
+
+.polaroid:hover {
+  transform: rotate(0deg) translateY(-8px) scale(1.04);
+  box-shadow:
+    0 22px 42px -6px rgba(0, 0, 0, 0.2),
+    0 8px 16px -2px rgba(0, 0, 0, 0.12);
+  z-index: 5;
+}
+
+.polaroid__photo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #ecefe8;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.polaroid__img {
+  object-fit: cover;
+  transition: transform 0.6s var(--ease);
+}
+
+.polaroid:hover .polaroid__img {
+  transform: scale(1.06);
+}
+
+.polaroid__caption {
+  font-family: var(--font-caveat), cursive;
+  font-size: 1.45rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: #1a1a1a;
+  text-align: center;
+  margin-top: 14px;
+  letter-spacing: 0.02em;
 }
 
 /* ---------------------------------------------------------------
@@ -725,6 +947,20 @@ button {
    Worked at
 --------------------------------------------------------------- */
 
+/* The wall carries the interior column lines itself, so they begin on the
+   rule the logos start on and the heading above stays uncrossed. It sits
+   inside the container, so the frame needs none of the gutter it subtracts
+   at page level, and it reaches down through the section's trailing air to
+   meet the footer exactly as the section-wide lines do. */
+.worked__wall {
+  position: relative;
+}
+
+.worked__wall .frame {
+  width: 100%;
+  bottom: calc(var(--pad-y) * -1);
+}
+
 .logos {
   --logo-unit: clamp(1rem, 2vw, 1.5rem);
   position: relative;
@@ -921,6 +1157,12 @@ button {
    longer describe anything. */
 @media (max-width: 899px) {
   .frame span:not(:first-child):not(:last-child) {
+    display: none;
+  }
+
+  /* The wall's frame is nothing but interior lines, so it goes entirely —
+     the section's own edges are still drawn above it. */
+  .worked__wall .frame {
     display: none;
   }
 }

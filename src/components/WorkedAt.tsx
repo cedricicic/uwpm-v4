@@ -1,7 +1,6 @@
 import Image from "next/image";
 
-import Frame, { lines } from "./Frame";
-import Spark from "./Spark";
+import Frame, { lines, without } from "./Frame";
 
 // Each logo carries its own optical height — the marks are drawn at wildly
 // different aspect ratios, so a single height would make Autodesk tower over
@@ -30,8 +29,10 @@ const companies = [
 export default function WorkedAt() {
   return (
     <section className="section">
-      <Frame at={lines(1)} />
-      <Spark />
+      {/* Only the section's own edges run its full height; the five interior
+          lines are drawn by the wall below, so none of them crosses the
+          headline. */}
+      <Frame at={lines(6)} />
       <div className="container">
         <div className="section__head inset">
           <h2 className="heading" data-reveal>
@@ -39,18 +40,21 @@ export default function WorkedAt() {
           </h2>
         </div>
 
-        <div className="logos" data-reveal-group>
-          {companies.map((c) => (
-            <div key={c.name}>
-              <Image
-                src={`/logos/${c.file}`}
-                alt={c.name}
-                width={c.w}
-                height={c.h}
-                style={{ "--logo-scale": c.scale } as React.CSSProperties}
-              />
-            </div>
-          ))}
+        <div className="worked__wall">
+          <Frame at={without(lines(1), lines(6))} />
+          <div className="logos" data-reveal-group>
+            {companies.map((c) => (
+              <div key={c.name}>
+                <Image
+                  src={`/logos/${c.file}`}
+                  alt={c.name}
+                  width={c.w}
+                  height={c.h}
+                  style={{ "--logo-scale": c.scale } as React.CSSProperties}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
