@@ -31,7 +31,7 @@ export default function Nav() {
             priority
           />
         </a>
-        <nav className="nav__links utility" aria-label="Primary">
+        <nav className="nav__links" aria-label="Primary">
           {links.map((l) => (
             <a key={l.href} className="nav__link" href={l.href}>
               {l.label}

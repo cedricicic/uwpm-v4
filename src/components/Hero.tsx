@@ -45,13 +45,13 @@ export default function Hero() {
     const ctx = gsap.context(() => {
       const lines = gsap.utils.toArray<HTMLElement>(".hero__line > span");
 
-      gsap.set(lines, { yPercent: 110 });
+      gsap.set(lines, { yPercent: 100 });
       gsap.to(lines, {
         yPercent: 0,
-        duration: 1.2,
-        ease: "expo.out",
-        stagger: 0.075,
-        delay: 0.12,
+        duration: 0.55,
+        ease: "power4.out",
+        stagger: 0.04,
+        delay: 0.05,
       });
 
       gsap.to(title.current, {

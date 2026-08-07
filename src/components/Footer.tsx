@@ -35,7 +35,7 @@ export default function Footer() {
       <div className="container footer__body">
         <Frame at={lines(2)} />
 
-        <div className="footer__row">
+        <div className="footer__row" data-reveal-group>
           <div className="footer__cell inset">
             <p className="footer__blurb">
               Fostering the creative product management community at the

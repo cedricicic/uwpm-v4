@@ -259,8 +259,8 @@ export default function HeroBloom() {
       if (!start) start = now;
       const t = (now - start) / 1000;
 
-      const intro = Math.min(1, t / 1.15);
-      const eased = 1 - Math.pow(1 - intro, 3);
+      const intro = Math.min(1, t / 0.55);
+      const eased = 1 - Math.pow(1 - intro, 4);
       uniforms.uIntro.value = eased;
 
       if (!canHover) {

@@ -15,7 +15,7 @@ export default function About() {
         </div>
 
         <div className="about__canvas-wrap">
-          <div className="about__canvas">
+          <div className="about__canvas" data-reveal-group>
             {/* SVG Background Layer (Grid lines, stars, dashed curves, bottom hexagon) */}
             <svg
               viewBox="300 120 1880 1760"

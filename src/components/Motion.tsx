@@ -14,22 +14,22 @@ export default function Motion() {
     const ctx = gsap.context(() => {
       gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) => {
         gsap.from(el, {
-          y: 24,
+          y: 16,
           autoAlpha: 0,
-          duration: 0.9,
-          ease: "power3.out",
-          scrollTrigger: { trigger: el, start: "top 90%", once: true },
+          duration: 0.45,
+          ease: "power4.out",
+          scrollTrigger: { trigger: el, start: "top 92%", once: true },
         });
       });
 
       gsap.utils.toArray<HTMLElement>("[data-reveal-group]").forEach((group) => {
         gsap.from(Array.from(group.children), {
-          y: 30,
+          y: 20,
           autoAlpha: 0,
-          duration: 0.9,
-          ease: "power3.out",
-          stagger: 0.08,
-          scrollTrigger: { trigger: group, start: "top 88%", once: true },
+          duration: 0.45,
+          ease: "power4.out",
+          stagger: 0.04,
+          scrollTrigger: { trigger: group, start: "top 90%", once: true },
         });
       });
     });
