@@ -315,6 +315,7 @@ button {
 
 .hero__title::after {
   bottom: 0;
+  opacity: 0;
 }
 
 /* The column lines live inside the headline so they stay locked to the
@@ -355,6 +356,7 @@ button {
 
 .hero__rails i::after {
   top: 100%;
+  display: none;
 }
 
 .hero__title > span {
