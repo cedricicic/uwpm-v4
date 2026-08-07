@@ -76,7 +76,7 @@ export default function Gallery() {
           to the six below. Running the full field through here lets that
           happen behind the posters rather than as a jump between
           sections. */}
-      <Frame at={lines(1)} />
+      <Frame at={[0, 6]} />
 
       {posters.map((p, i) => (
         <div

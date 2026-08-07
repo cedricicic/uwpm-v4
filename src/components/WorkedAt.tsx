@@ -28,7 +28,7 @@ const companies = [
 
 export default function WorkedAt() {
   return (
-    <section className="section">
+    <section className="section worked">
       {/* Only the section's own edges run its full height; the five interior
           lines are drawn by the wall below, so none of them crosses the
           headline. */}
