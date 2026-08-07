@@ -859,27 +859,43 @@ button {
   }
 }
 
-.polaroid--tilt-left {
-  transform: rotate(-10deg);
-}
-
-.polaroid--tilt-right {
-  transform: rotate(13deg);
-}
-
-.polaroid--tilt-slight {
-  transform: rotate(-5deg);
-}
-
 /* ---------------------------------------------------------------
    Polaroid Photo Frames
 --------------------------------------------------------------- */
 
-.polaroid {
+.polaroid-wrap {
   position: relative;
   width: 100%;
   max-width: 340px;
   margin: 16px auto 8px;
+  cursor: pointer;
+  z-index: 1;
+  transition: z-index 0.4s var(--ease);
+}
+
+/* Extended hit target overlay so hovering any corner or edge is a solid binary state */
+.polaroid-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -16px;
+  z-index: 1;
+}
+
+.polaroid-wrap--tilt-left {
+  transform: rotate(-10deg);
+}
+
+.polaroid-wrap--tilt-right {
+  transform: rotate(13deg);
+}
+
+.polaroid-wrap--tilt-slight {
+  transform: rotate(-5deg);
+}
+
+.polaroid {
+  position: relative;
+  width: 100%;
   padding: 14px 14px 18px;
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -892,15 +908,29 @@ button {
     transform 0.4s var(--ease),
     box-shadow 0.4s var(--ease);
   will-change: transform, box-shadow;
-  cursor: pointer;
 }
 
-.polaroid:hover {
-  transform: rotate(0deg) translateY(-8px) scale(1.04);
+.polaroid-wrap:hover {
+  z-index: 5;
+}
+
+/* Counter-rotations on hover relative to wrapper tilt */
+.polaroid-wrap--tilt-left:hover .polaroid {
+  transform: rotate(10deg) translateY(-8px) scale(1.04);
+}
+
+.polaroid-wrap--tilt-right:hover .polaroid {
+  transform: rotate(-13deg) translateY(-8px) scale(1.04);
+}
+
+.polaroid-wrap--tilt-slight:hover .polaroid {
+  transform: rotate(5deg) translateY(-8px) scale(1.04);
+}
+
+.polaroid-wrap:hover .polaroid {
   box-shadow:
     0 22px 42px -6px rgba(0, 0, 0, 0.2),
     0 8px 16px -2px rgba(0, 0, 0, 0.12);
-  z-index: 5;
 }
 
 .polaroid__photo {
@@ -917,7 +947,7 @@ button {
   transition: transform 0.6s var(--ease);
 }
 
-.polaroid:hover .polaroid__img {
+.polaroid-wrap:hover .polaroid__img {
   transform: scale(1.06);
 }
 

@@ -130,17 +130,19 @@ export default function About() {
 
             {/* TOP LEFT: Polaroid 1 */}
             <div className="about__node about__node--polaroid-1">
-              <div className="polaroid polaroid--tilt-left">
-                <div className="polaroid__photo">
-                  <Image
-                    src="/about/polaroid-1.jpg"
-                    alt="UW PM execs at ProdCon ‘22!"
-                    fill
-                    sizes="380px"
-                    className="polaroid__img"
-                  />
+              <div className="polaroid-wrap polaroid-wrap--tilt-left">
+                <div className="polaroid">
+                  <div className="polaroid__photo">
+                    <Image
+                      src="/about/polaroid-1.jpg"
+                      alt="UW PM execs at ProdCon ‘22!"
+                      fill
+                      sizes="380px"
+                      className="polaroid__img"
+                    />
+                  </div>
+                  <p className="polaroid__caption">UW PM execs at ProdCon ‘22!</p>
                 </div>
-                <p className="polaroid__caption">UW PM execs at ProdCon ‘22!</p>
               </div>
             </div>
 
@@ -166,33 +168,37 @@ export default function About() {
 
             {/* MIDDLE RIGHT: Polaroid 2 */}
             <div className="about__node about__node--polaroid-2">
-              <div className="polaroid polaroid--tilt-right">
-                <div className="polaroid__photo">
-                  <Image
-                    src="/about/polaroid-2.jpg"
-                    alt="UW PM execs at ProdCon ‘22!"
-                    fill
-                    sizes="380px"
-                    className="polaroid__img"
-                  />
+              <div className="polaroid-wrap polaroid-wrap--tilt-right">
+                <div className="polaroid">
+                  <div className="polaroid__photo">
+                    <Image
+                      src="/about/polaroid-2.jpg"
+                      alt="UW PM execs at ProdCon ‘22!"
+                      fill
+                      sizes="380px"
+                      className="polaroid__img"
+                    />
+                  </div>
+                  <p className="polaroid__caption">UW PM execs at ProdCon ‘22!</p>
                 </div>
-                <p className="polaroid__caption">UW PM execs at ProdCon ‘22!</p>
               </div>
             </div>
 
             {/* BOTTOM LEFT: Polaroid 3 */}
             <div className="about__node about__node--polaroid-3">
-              <div className="polaroid polaroid--tilt-slight">
-                <div className="polaroid__photo">
-                  <Image
-                    src="/about/polaroid-3.jpg"
-                    alt="UW PM execs at ProdCon ‘22!"
-                    fill
-                    sizes="380px"
-                    className="polaroid__img"
-                  />
+              <div className="polaroid-wrap polaroid-wrap--tilt-slight">
+                <div className="polaroid">
+                  <div className="polaroid__photo">
+                    <Image
+                      src="/about/polaroid-3.jpg"
+                      alt="UW PM execs at ProdCon ‘22!"
+                      fill
+                      sizes="380px"
+                      className="polaroid__img"
+                    />
+                  </div>
+                  <p className="polaroid__caption">UW PM execs at ProdCon ‘22!</p>
                 </div>
-                <p className="polaroid__caption">UW PM execs at ProdCon ‘22!</p>
               </div>
             </div>
 
