@@ -31,7 +31,7 @@
   --bar-h: clamp(20px, 3vw, 40px);
   --chamfer: calc(var(--bar-h) / 2);
   --maxw: 1560px;
-  --nav-h: 66px;
+  --nav-h: 88px;
 
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -236,6 +236,8 @@ button {
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  padding-top: 14px;
+  padding-bottom: 14px;
 }
 
 .nav__mark {

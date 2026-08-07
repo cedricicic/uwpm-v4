@@ -33,7 +33,7 @@ const HERO_EDGE = [0];
  * <Frame>, so each breaks at the rules above and below the type and
  * resumes past them — the grid runs around the headline, never through it.
  */
-const HERO_RAILS = [1, 2];
+const HERO_RAILS: number[] = [];
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
