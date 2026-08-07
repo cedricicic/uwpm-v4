@@ -219,16 +219,41 @@ button {
   height: var(--nav-h);
   display: flex;
   align-items: center;
-  transition: background 0.4s var(--ease), backdrop-filter 0.4s var(--ease);
+}
+
+.nav::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: -24px;
+  z-index: -1;
+  pointer-events: none;
   background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 1) 45%,
+    rgba(0, 0, 0, 0.75) 70%,
+    rgba(0, 0, 0, 0.3) 88%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 1) 45%,
+    rgba(0, 0, 0, 0.75) 70%,
+    rgba(0, 0, 0, 0.3) 88%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  transition: background 0.4s var(--ease);
 }
 
-.nav[data-stuck="true"] {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+.nav[data-stuck="true"]::before {
+  background: rgba(255, 255, 255, 0.88);
 }
 
 .nav__inner {
