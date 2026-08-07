@@ -219,11 +219,16 @@ button {
   height: var(--nav-h);
   display: flex;
   align-items: center;
-  transition: background 0.4s var(--ease);
+  transition: background 0.4s var(--ease), backdrop-filter 0.4s var(--ease);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .nav[data-stuck="true"] {
-  background: var(--paper);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .nav__inner {
