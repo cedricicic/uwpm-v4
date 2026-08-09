@@ -973,6 +973,77 @@ button {
   background: var(--paper);
 }
 
+.past-winners__decorations {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.past-winners__svg {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+}
+
+.past-winners__svg--highlight {
+  top: clamp(35px, 5vh, 75px);
+  left: clamp(480px, 56vw, 860px);
+  width: clamp(36px, 3.5vw, 54px);
+  height: auto;
+  opacity: 0.85;
+  animation: floatDeco1 5s ease-in-out infinite alternate;
+}
+
+.past-winners__svg--vector {
+  bottom: clamp(30px, 6vh, 90px);
+  left: clamp(20px, 3.5vw, 70px);
+  width: clamp(80px, 8vw, 130px);
+  height: auto;
+  opacity: 0.65;
+  transform: rotate(-10deg);
+  animation: floatDeco2 6s ease-in-out infinite alternate;
+}
+
+.past-winners__svg--star-solid {
+  top: clamp(60px, 10vh, 140px);
+  right: clamp(20px, 4vw, 80px);
+  width: clamp(40px, 4.5vw, 65px);
+  height: auto;
+  opacity: 0.7;
+  animation: floatDeco3 4.5s ease-in-out infinite alternate;
+}
+
+.past-winners__svg--star-outline {
+  bottom: clamp(50px, 8vh, 120px);
+  right: clamp(30px, 7vw, 140px);
+  width: clamp(50px, 5vw, 75px);
+  height: auto;
+  opacity: 0.6;
+  animation: floatDeco4 5.5s ease-in-out infinite alternate;
+}
+
+@keyframes floatDeco1 {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-6px) rotate(8deg); }
+}
+
+@keyframes floatDeco2 {
+  0% { transform: translateY(0) rotate(-10deg) scale(1); }
+  100% { transform: translateY(-8px) rotate(-4deg) scale(1.04); }
+}
+
+@keyframes floatDeco3 {
+  0% { transform: translateY(0) rotate(0deg) scale(1); }
+  100% { transform: translateY(-9px) rotate(15deg) scale(1.08); }
+}
+
+@keyframes floatDeco4 {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-7px) rotate(-12deg); }
+}
+
 .past-winners__inner {
   position: relative;
   z-index: 1;

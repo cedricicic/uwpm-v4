@@ -86,6 +86,38 @@ export default function PastWinners() {
     <section className="section past-winners" id="winners" ref={sectionRef}>
       <Frame at={[0, 6]} />
 
+      {/* Decorative background SVGs */}
+      <div className="past-winners__decorations" aria-hidden="true">
+        <Image
+          src="/svg/Highlight 29.svg"
+          alt=""
+          width={62}
+          height={69}
+          className="past-winners__svg past-winners__svg--highlight"
+        />
+        <Image
+          src="/svg/Vector.svg"
+          alt=""
+          width={129}
+          height={84}
+          className="past-winners__svg past-winners__svg--vector"
+        />
+        <Image
+          src="/svg/Stars.svg"
+          alt=""
+          width={80}
+          height={80}
+          className="past-winners__svg past-winners__svg--star-solid"
+        />
+        <Image
+          src="/svg/Stars-1.svg"
+          alt=""
+          width={90}
+          height={90}
+          className="past-winners__svg past-winners__svg--star-outline"
+        />
+      </div>
+
       <div className="past-winners__inner">
         <div className="container">
           <div className="section__head inset">
