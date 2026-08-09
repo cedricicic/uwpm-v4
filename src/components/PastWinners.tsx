@@ -61,12 +61,15 @@ export default function PastWinners() {
 
     const mm = gsap.matchMedia();
     const ctx = gsap.context(() => {
-      mm.add("(min-width: 768px)", () => {
+      mm.add("all", () => {
         const getScrollAmount = () => {
-          if (!trackRef.current || !trackRef.current.parentElement) return 0;
-          const trackWidth = trackRef.current.scrollWidth;
-          const containerWidth = trackRef.current.parentElement.clientWidth;
-          return -(trackWidth - containerWidth);
+          const track = trackRef.current;
+          const band = track?.parentElement;
+          const lastCard = track?.lastElementChild;
+          if (!track || !band || !lastCard) return 0;
+
+          // Offset values stay stable while GSAP changes the track transform.
+          return -Math.max(0, lastCard.offsetLeft + lastCard.offsetWidth - band.clientWidth);
         };
 
         gsap.to(trackRef.current, {

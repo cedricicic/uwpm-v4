@@ -1253,23 +1253,17 @@ button {
     filter: contrast(0.90);
   }
 
-  /* Mobile layout keeps the card track in normal page flow. */
+  /* Mobile layout keeps the pinned track compact and viewport-safe. */
   .past-winners__inner {
-    min-height: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
     padding-top: clamp(16px, 2.5vh, 32px);
     padding-bottom: clamp(16px, 2.5vh, 32px);
   }
 
   .past-winners__band {
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: hidden;
     padding-block: calc(var(--pad-y) * 0.4);
-    overscroll-behavior-inline: contain;
-    scrollbar-width: none;
-  }
-
-  .past-winners__band::-webkit-scrollbar {
-    display: none;
   }
 
   .past-winners__track {
@@ -1279,7 +1273,6 @@ button {
 
   .past-winners__project-col {
     flex: 0 0 clamp(270px, 78vw, 360px);
-    scroll-snap-align: start;
   }
 }
 
