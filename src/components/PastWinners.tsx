@@ -64,7 +64,7 @@ export default function PastWinners() {
         if (!trackRef.current || !trackRef.current.parentElement) return 0;
         const trackWidth = trackRef.current.scrollWidth;
         const containerWidth = trackRef.current.parentElement.clientWidth;
-        return -(trackWidth - containerWidth + 90);
+        return -(trackWidth - containerWidth);
       };
 
       gsap.to(trackRef.current, {

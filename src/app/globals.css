@@ -279,6 +279,11 @@ button {
   height: var(--nav-h);
   display: flex;
   align-items: center;
+  transition: background-color 0.4s var(--ease);
+}
+
+.nav[data-open="true"] {
+  background-color: var(--paper);
 }
 
 .nav::before {
@@ -309,11 +314,20 @@ button {
     rgba(0, 0, 0, 0.3) 88%,
     rgba(0, 0, 0, 0) 100%
   );
-  transition: background 0.4s var(--ease);
+  transition: background 0.4s var(--ease), opacity 0.4s var(--ease);
 }
 
 .nav[data-stuck="true"]::before {
   background: rgba(255, 255, 255, 0.88);
+}
+
+.nav[data-open="true"]::before {
+  background: var(--paper);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  -webkit-mask-image: none;
+  mask-image: none;
+  bottom: 0;
 }
 
 .nav__inner {
@@ -415,13 +429,14 @@ button {
   background: var(--paper);
   display: flex;
   flex-direction: column;
-  padding: calc(var(--pad-y) * 1.5) var(--gutter);
+  padding-top: 16px;
+  padding-bottom: calc(var(--pad-y) * 1.5);
   opacity: 0;
   pointer-events: none;
   transform: translateY(-8px);
   transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
   z-index: 45;
-  border-top: 1px dashed var(--rule);
+  overflow: hidden;
 }
 
 .nav__mobile--open {
@@ -430,25 +445,108 @@ button {
   transform: translateY(0);
 }
 
+.nav__mobile-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
 .nav__mobile-links {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
+}
+
+.nav__mobile-item {
+  position: relative;
+  width: 100%;
 }
 
 .nav__mobile-link {
-  font-size: 1.5rem;
+  display: block;
+  font-size: clamp(1.4rem, 5vw, 1.8rem);
   font-weight: 600;
   color: var(--ink);
-  padding-block: 12px;
-  border-bottom: 1px dashed var(--rule);
-  transition: color 0.2s var(--ease), padding-left 0.2s var(--ease);
+  padding-block: 16px;
+  padding-inline: var(--pad-x);
+  transition: color 0.2s var(--ease), transform 0.2s var(--ease);
 }
 
 .nav__mobile-link:hover,
 .nav__mobile-link:focus-visible {
   color: var(--signal);
-  padding-left: 8px;
+  transform: translateX(8px);
+}
+
+/* Extending horizontal dashed line under each link */
+.nav__mobile-line {
+  display: block;
+  width: 100%;
+  height: 0;
+  border-bottom: 1px dashed var(--rule);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.7s var(--ease);
+  will-change: transform;
+}
+
+.nav__mobile--open .nav__mobile-line {
+  transform: scaleX(1);
+}
+
+/* Horizontal top & bottom boundary lines extending from center */
+.nav__mobile-rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px dashed var(--rule);
+  pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.8s var(--ease) 0.1s;
+  z-index: 2;
+  will-change: transform;
+}
+
+.nav__mobile-rule--top {
+  top: 0;
+}
+
+.nav__mobile-rule--bottom {
+  bottom: calc(var(--pad-y) * 1.5);
+}
+
+.nav__mobile--open .nav__mobile-rule {
+  transform: scaleX(1);
+}
+
+/* Vertical frame grid lines extending down inside mobile drawer */
+.nav__mobile .frame {
+  z-index: 0;
+}
+
+.nav__mobile .frame span {
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.9s var(--ease) 0.15s;
+}
+
+.nav__mobile--open .frame span {
+  transform: scaleY(1);
+}
+
+.nav__mobile .frame span::before,
+.nav__mobile .frame span::after {
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s, opacity 0.3s var(--ease) 0.35s;
+}
+
+.nav__mobile--open .frame span::before,
+.nav__mobile--open .frame span::after {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
 }
 
 /* ---------------------------------------------------------------
@@ -1129,19 +1227,36 @@ button {
     transform: rotate(-3deg);
   }
 
+  /* Disable hover and active tilt/scale/shadow effects on mobile cards */
+  .polaroid-wrap:hover,
+  .polaroid-wrap:active {
+    z-index: 10;
+  }
+
+  .polaroid-wrap:hover .polaroid,
+  .polaroid-wrap:active .polaroid,
   .polaroid-wrap--tilt-left:hover .polaroid,
-  .polaroid-wrap--tilt-left:active .polaroid {
-    transform: rotate(5deg) translateY(-2px) scale(1.02);
-  }
-
+  .polaroid-wrap--tilt-left:active .polaroid,
   .polaroid-wrap--tilt-right:hover .polaroid,
-  .polaroid-wrap--tilt-right:active .polaroid {
-    transform: rotate(-5deg) translateY(-2px) scale(1.02);
-  }
-
+  .polaroid-wrap--tilt-right:active .polaroid,
   .polaroid-wrap--tilt-slight:hover .polaroid,
   .polaroid-wrap--tilt-slight:active .polaroid {
-    transform: rotate(3deg) translateY(-2px) scale(1.02);
+    transform: none;
+    box-shadow:
+      0 10px 24px -4px rgba(0, 0, 0, 0.18),
+      0 2px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .polaroid-wrap:hover .polaroid__img,
+  .polaroid-wrap:active .polaroid__img {
+    transform: none;
+    filter: contrast(0.90);
+  }
+
+  /* Mobile compact padding for past-winners to eliminate white space gap */
+  .past-winners__inner {
+    padding-top: clamp(24px, 4vh, 40px);
+    padding-bottom: clamp(16px, 3vh, 28px);
   }
 }
 
@@ -1196,27 +1311,33 @@ button {
   will-change: transform, box-shadow;
 }
 
-.polaroid-wrap:hover {
-  z-index: 5;
-}
+@media (min-width: 768px) {
+  .polaroid-wrap:hover {
+    z-index: 5;
+  }
 
-/* Counter-rotations on hover relative to wrapper tilt */
-.polaroid-wrap--tilt-left:hover .polaroid {
-  transform: rotate(10deg) translateY(-8px) scale(1.04);
-}
+  /* Counter-rotations on hover relative to wrapper tilt */
+  .polaroid-wrap--tilt-left:hover .polaroid {
+    transform: rotate(10deg) translateY(-8px) scale(1.04);
+  }
 
-.polaroid-wrap--tilt-right:hover .polaroid {
-  transform: rotate(-13deg) translateY(-8px) scale(1.04);
-}
+  .polaroid-wrap--tilt-right:hover .polaroid {
+    transform: rotate(-13deg) translateY(-8px) scale(1.04);
+  }
 
-.polaroid-wrap--tilt-slight:hover .polaroid {
-  transform: rotate(5deg) translateY(-8px) scale(1.04);
-}
+  .polaroid-wrap--tilt-slight:hover .polaroid {
+    transform: rotate(5deg) translateY(-8px) scale(1.04);
+  }
 
-.polaroid-wrap:hover .polaroid {
-  box-shadow:
-    0 22px 42px -6px rgba(0, 0, 0, 0.2),
-    0 8px 16px -2px rgba(0, 0, 0, 0.12);
+  .polaroid-wrap:hover .polaroid {
+    box-shadow:
+      0 22px 42px -6px rgba(0, 0, 0, 0.2),
+      0 8px 16px -2px rgba(0, 0, 0, 0.12);
+  }
+
+  .polaroid-wrap:hover .polaroid__img {
+    transform: scale(1.06);
+  }
 }
 
 .polaroid__photo {
@@ -1232,10 +1353,6 @@ button {
   object-fit: cover;
   filter: contrast(0.90);
   transition: transform 0.6s var(--ease), filter 0.6s var(--ease);
-}
-
-.polaroid-wrap:hover .polaroid__img {
-  transform: scale(1.06);
 }
 
 .polaroid__caption {

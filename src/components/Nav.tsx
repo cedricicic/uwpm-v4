@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Frame, { lines } from "./Frame";
 
 const links = [
   { label: "Home", href: "#home" },
@@ -87,18 +88,28 @@ export default function Nav() {
         className={`nav__mobile ${menuOpen ? "nav__mobile--open" : ""}`}
         aria-hidden={!menuOpen}
       >
-        <nav className="nav__mobile-links" aria-label="Mobile Primary">
-          {links.map((l) => (
-            <a
-              key={l.href}
-              className="nav__mobile-link"
-              href={l.href}
-              onClick={() => setMenuOpen(false)}
-            >
-              {l.label}
-            </a>
-          ))}
-        </nav>
+        <Frame at={lines(2)} />
+        <span className="nav__mobile-rule nav__mobile-rule--top" />
+        <div className="container nav__mobile-inner">
+          <nav className="nav__mobile-links" aria-label="Mobile Primary">
+            {links.map((l, index) => (
+              <div key={l.href} className="nav__mobile-item">
+                <a
+                  className="nav__mobile-link"
+                  href={l.href}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {l.label}
+                </a>
+                <span
+                  className="nav__mobile-line"
+                  style={{ transitionDelay: `${0.18 + index * 0.1}s` }}
+                />
+              </div>
+            ))}
+          </nav>
+        </div>
+        <span className="nav__mobile-rule nav__mobile-rule--bottom" />
       </div>
     </header>
   );
