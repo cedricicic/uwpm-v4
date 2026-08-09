@@ -1182,7 +1182,7 @@ button {
 .polaroid {
   position: relative;
   width: 100%;
-  padding: 14px 14px 18px;
+  padding: clamp(8px, 1.2vw, 14px) clamp(8px, 1.2vw, 14px) clamp(10px, 1.5vw, 18px);
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 2px;
@@ -1240,12 +1240,12 @@ button {
 
 .polaroid__caption {
   font-family: var(--font-caveat), cursive;
-  font-size: 1.45rem;
+  font-size: clamp(0.85rem, 1.25vw, 1.45rem);
   font-weight: 500;
   line-height: 1.2;
   color: #1a1a1a;
   text-align: center;
-  margin-top: 14px;
+  margin-top: clamp(6px, 1vw, 14px);
   letter-spacing: 0.02em;
 }
 
@@ -1959,12 +1959,20 @@ button {
   }
 }
 
-@media (min-width: 900px) {
-  /* Headline block ends on the five-sixths column line. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero {
+    --hero-title-f: 0.666667;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Headline block ends on the five-sixths column line for laptop/desktop. */
   .hero {
     --hero-title-f: 0.833333;
   }
+}
 
+@media (min-width: 900px) {
   .row {
     grid-template-columns: repeat(3, 1fr);
   }

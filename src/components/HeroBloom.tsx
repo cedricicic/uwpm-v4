@@ -48,6 +48,9 @@ const FRAG = /* glsl */ `
   uniform sampler2D uTexture;
   uniform vec2      uImgRes;
   uniform float     uHasTex;
+  uniform float     uTitleTop;     // Top of title in UV (0..1 from bottom)
+  uniform float     uTitleRight;   // Right edge of title in UV (0..1 from left)
+  uniform float     uViewportMode; // 0.0 = Mobile (<768), 1.0 = Tablet (768-1023), 2.0 = Laptop (>=1024)
 
   const float SIGMA = 28.0;
 
@@ -111,7 +114,7 @@ const FRAG = /* glsl */ `
     col = cluster(col, p - uB, uRotB); // lower right sits underneath
     col = cluster(col, p - uA, uRotA);
 
-    // Aspect-ratio mapping for group photo background (right-aligned, no stretching)
+    // Aspect-ratio mapping for group photo background (no stretching)
     vec2 imgUv = vUv;
     bool inTex = false;
 
@@ -120,22 +123,49 @@ const FRAG = /* glsl */ `
       float imgAspect = uImgRes.x / uImgRes.y;
 
       float targetW, targetH;
-      if (canvasAspect < 1.0) {
-        // Mobile / tall viewports: fit 96% width for slightly larger image presence
-        targetW = 0.96;
-        targetH = targetW * canvasAspect / imgAspect;
+      float xMin, xMax, yMin, yMax;
+
+      if (uViewportMode < 0.5) {
+        // MOBILE ONLY (<768px): Image sits strictly in space ABOVE uTitleTop with a guaranteed gap.
+        float safeBottom = min(0.75, uTitleTop + 0.035);
+        float maxH = max(0.18, 0.95 - safeBottom);
+
+        float computedW = maxH * imgAspect / canvasAspect;
+        float maxW = min(0.88, 0.58 / canvasAspect);
+
+        if (computedW > maxW) {
+          targetW = maxW;
+          targetH = targetW * canvasAspect / imgAspect;
+        } else {
+          targetW = computedW;
+          targetH = min(maxH, targetW * canvasAspect / imgAspect);
+        }
+
+        xMax = 0.5 + targetW * 0.5;
+        xMin = xMax - targetW;
+
+        yMin = safeBottom;
+        yMax = yMin + targetH;
+      } else if (uViewportMode < 1.5) {
+        // TABLET RANGE ONLY (768px <= w < 1024px): Position image on TOP RIGHT (slightly larger scale)
+        targetH = (canvasAspect > 1.3) ? 0.54 : 0.50;
+        targetW = targetH * imgAspect / canvasAspect;
+
+        xMax = 0.95; // Right side
+        xMin = xMax - targetW;
+
+        yMax = 0.90; // Top side
+        yMin = yMax - targetH;
       } else {
-        // Desktop / wide viewports: fit height, leaning right
+        // LAPTOP & DESKTOP (>=1024px): EXACT ORIGINAL AUTHORING
         targetH = 0.78;
         targetW = targetH * imgAspect / canvasAspect;
-      }
 
-      // Position all the way to the right with right padding
-      float xMax = canvasAspect < 1.0 ? (0.5 + targetW * 0.5) : 0.96;
-      float xMin = xMax - targetW;
-      
-      float yMin = canvasAspect < 1.0 ? (0.54 - targetH * 0.5) : (0.5 - targetH * 0.5);
-      float yMax = yMin + targetH;
+        xMax = 0.96;
+        xMin = xMax - targetW;
+        yMin = 0.5 - targetH * 0.5;
+        yMax = yMin + targetH;
+      }
 
       imgUv.x = (vUv.x - xMin) / targetW;
       imgUv.y = (vUv.y - yMin) / targetH;
@@ -239,6 +269,9 @@ export default function HeroBloom() {
       uTexture: { value: null as THREE.Texture | null },
       uImgRes: { value: new THREE.Vector2(1, 1) },
       uHasTex: { value: 0 },
+      uTitleTop: { value: 0.40 },
+      uTitleRight: { value: 0.50 },
+      uViewportMode: { value: 2 },
     };
 
     let loadedTexture: THREE.Texture | null = null;
@@ -270,6 +303,32 @@ export default function HeroBloom() {
     );
     scene.add(mesh);
 
+    const updateTitleBounds = () => {
+      const heroRect = el.getBoundingClientRect();
+      const titleEl = el.parentElement?.querySelector(".hero__title") || document.querySelector(".hero__title");
+      if (titleEl && heroRect.height > 0 && heroRect.width > 0) {
+        const titleRect = titleEl.getBoundingClientRect();
+
+        const titleTopUv = Math.min(0.90, Math.max(0.05, (heroRect.bottom - titleRect.top) / heroRect.height));
+        const titleRightUv = Math.min(0.90, Math.max(0.05, (titleRect.right - heroRect.left) / heroRect.width));
+
+        const w = el.clientWidth;
+        let mode = 0; // Mobile (< 768px)
+        if (w >= 768 && w < 1024) {
+          mode = 1; // Tablet range (768px <= w < 1024px)
+        } else if (w >= 1024) {
+          mode = 2; // Laptop / Desktop (>= 1024px)
+        }
+
+        uniforms.uTitleTop.value = titleTopUv;
+        uniforms.uTitleRight.value = titleRightUv;
+        uniforms.uViewportMode.value = mode;
+
+        return { titleTopUv, titleRightUv, mode, w, h: heroRect.height };
+      }
+      return null;
+    };
+
     const resize = () => {
       const w = el.clientWidth;
       const h = el.clientHeight;
@@ -277,14 +336,23 @@ export default function HeroBloom() {
       renderer.setSize(w, h, false);
       uniforms.uRes.value.set(w * dpr, h * dpr);
 
-      const narrow = w < 760;
-      // Big enough to carry the hero, but sized off the short edge too so
-      // it never turns into a stripe on a tall phone.
-      uniforms.uScale.value = Math.max(w * (narrow ? 0.00102 : 0.00088), h * (narrow ? 0.00112 : 0.00098)) * dpr;
-      uniforms.uOrigin.value.set(
-        w * (narrow ? 0.6 : 0.71) * dpr,
-        h * (narrow ? 0.55 : 0.56) * dpr
-      );
+      const bounds = updateTitleBounds();
+      if (bounds) {
+        if (bounds.mode === 0) {
+          // Mobile (< 768px): Image sits strictly above title text
+          const imageCenterY = Math.min(0.85, (bounds.titleTopUv + 0.035 + 0.96) / 2);
+          uniforms.uScale.value = Math.max(w * 0.00102, h * 0.00112) * dpr;
+          uniforms.uOrigin.value.set(w * 0.5 * dpr, h * imageCenterY * dpr);
+        } else if (bounds.mode === 1) {
+          // Tablet Range (768px <= w < 1024px): TOP RIGHT positioning (larger image & bloom)
+          uniforms.uScale.value = Math.max(w * 0.00084, h * 0.00092) * dpr;
+          uniforms.uOrigin.value.set(w * 0.72 * dpr, h * 0.65 * dpr);
+        } else {
+          // Laptop / Desktop (>= 1024px): EXACT ORIGINAL
+          uniforms.uScale.value = Math.max(w * 0.00088, h * 0.00098) * dpr;
+          uniforms.uOrigin.value.set(w * 0.71 * dpr, h * 0.56 * dpr);
+        }
+      }
     };
     resize();
 
@@ -356,6 +424,7 @@ export default function HeroBloom() {
 
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
+      updateTitleBounds();
       if (!start) start = now;
       const t = (now - start) / 1000;
 
