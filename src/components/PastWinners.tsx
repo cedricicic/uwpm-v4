@@ -59,30 +59,36 @@ export default function PastWinners() {
   useLayoutEffect(() => {
     if (!sectionRef.current || !trackRef.current || prefersReducedMotion()) return;
 
+    const mm = gsap.matchMedia();
     const ctx = gsap.context(() => {
-      const getScrollAmount = () => {
-        if (!trackRef.current || !trackRef.current.parentElement) return 0;
-        const trackWidth = trackRef.current.scrollWidth;
-        const containerWidth = trackRef.current.parentElement.clientWidth;
-        return -(trackWidth - containerWidth);
-      };
+      mm.add("(min-width: 768px)", () => {
+        const getScrollAmount = () => {
+          if (!trackRef.current || !trackRef.current.parentElement) return 0;
+          const trackWidth = trackRef.current.scrollWidth;
+          const containerWidth = trackRef.current.parentElement.clientWidth;
+          return -(trackWidth - containerWidth);
+        };
 
-      gsap.to(trackRef.current, {
-        x: getScrollAmount,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          pin: true,
-          start: "top top",
-          end: () => "+=" + Math.abs(getScrollAmount()),
-          scrub: 0.2,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
+        gsap.to(trackRef.current, {
+          x: getScrollAmount,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            pin: true,
+            start: "top top",
+            end: () => "+=" + Math.abs(getScrollAmount()),
+            scrub: 0.2,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
       });
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      mm.revert();
+    };
   }, []);
 
   return (

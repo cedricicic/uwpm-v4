@@ -1253,17 +1253,23 @@ button {
     filter: contrast(0.90);
   }
 
-  /* Mobile layout for past-winners: compact padding and cards for crisp parallax pinning */
+  /* Mobile layout keeps the card track in normal page flow. */
   .past-winners__inner {
-    min-height: 100vh;
-    min-height: 100dvh;
+    min-height: 0;
     padding-top: clamp(16px, 2.5vh, 32px);
     padding-bottom: clamp(16px, 2.5vh, 32px);
   }
 
   .past-winners__band {
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
     padding-block: calc(var(--pad-y) * 0.4);
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+  }
+
+  .past-winners__band::-webkit-scrollbar {
+    display: none;
   }
 
   .past-winners__track {
@@ -1273,6 +1279,7 @@ button {
 
   .past-winners__project-col {
     flex: 0 0 clamp(270px, 78vw, 360px);
+    scroll-snap-align: start;
   }
 }
 

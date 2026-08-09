@@ -11,7 +11,7 @@ const LINES = [
   "Product",
   "Management",
   "Community",
-  "@ UWaterloo.",
+  "@UWaterloo.",
 ];
 
 /** The one word the accent colour is spent on. */
