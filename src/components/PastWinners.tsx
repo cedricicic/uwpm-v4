@@ -75,7 +75,8 @@ export default function PastWinners() {
           pin: true,
           start: "top top",
           end: () => "+=" + Math.abs(getScrollAmount()),
-          scrub: 0.8,
+          scrub: 0.2,
+          anticipatePin: 1,
           invalidateOnRefresh: true,
         },
       });

@@ -1253,10 +1253,26 @@ button {
     filter: contrast(0.90);
   }
 
-  /* Mobile compact padding for past-winners to eliminate white space gap */
+  /* Mobile layout for past-winners: compact padding and cards for crisp parallax pinning */
   .past-winners__inner {
-    padding-top: clamp(24px, 4vh, 40px);
-    padding-bottom: clamp(16px, 3vh, 28px);
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding-top: clamp(16px, 2.5vh, 32px);
+    padding-bottom: clamp(16px, 2.5vh, 32px);
+  }
+
+  .past-winners__band {
+    overflow: hidden;
+    padding-block: calc(var(--pad-y) * 0.4);
+  }
+
+  .past-winners__track {
+    gap: clamp(16px, 3.5vw, 28px);
+    padding-inline: calc(var(--gutter) + 8px);
+  }
+
+  .past-winners__project-col {
+    flex: 0 0 clamp(270px, 78vw, 360px);
   }
 }
 
