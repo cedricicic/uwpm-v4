@@ -66,7 +66,7 @@ export default function PastWinners() {
           const track = trackRef.current;
           const band = track?.parentElement;
           const lastCard = track?.lastElementChild;
-          if (!track || !band || !lastCard) return 0;
+          if (!track || !band || !(lastCard instanceof HTMLElement)) return 0;
 
           // Offset values stay stable while GSAP changes the track transform.
           return -Math.max(0, lastCard.offsetLeft + lastCard.offsetWidth - band.clientWidth);
