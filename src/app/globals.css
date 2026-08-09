@@ -963,6 +963,132 @@ button {
 }
 
 /* ---------------------------------------------------------------
+   Past Winners / Impactful Projects Section (Exact SOON Layout)
+--------------------------------------------------------------- */
+
+.past-winners {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+.past-winners__inner {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: clamp(30px, 4vh, 60px);
+  padding-bottom: clamp(60px, 8vh, 120px);
+}
+
+.past-winners__head-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.past-winners__band {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  overflow: hidden;
+  padding-block: calc(var(--pad-y) * 0.75);
+}
+
+.past-winners__track {
+  display: flex;
+  gap: clamp(28px, 3.5vw, 56px);
+  padding-inline: calc(var(--gutter) + var(--pad-x));
+  width: max-content;
+  will-change: transform;
+}
+
+.past-winners__project-col {
+  flex: 0 0 clamp(320px, 32vw, 480px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dashed border box surrounding the entire project item that scrolls with it */
+.past-winners__card-box {
+  position: relative;
+  height: 100%;
+  padding: clamp(16px, 2.2vw, 28px);
+  border: 1px dashed var(--rule-strong);
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.35s var(--ease);
+}
+
+.past-winners__project-col:hover .past-winners__card-box {
+  border-color: var(--signal);
+}
+
+.past-winners__img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--rule);
+  background: #f5f5f7;
+  overflow: hidden;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.past-winners__img {
+  object-fit: cover;
+}
+
+.past-winners__award-tag {
+  color: var(--signal);
+  font-weight: 600;
+  font-size: 0.76rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.past-winners__project-title {
+  font-size: clamp(2rem, 3.2vw, 2.8rem);
+  font-weight: 700;
+  font-variation-settings: "wdth" 110;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  margin-bottom: 10px;
+  color: var(--ink);
+}
+
+.past-winners__team {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--mute);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  line-height: 1.45;
+}
+
+.past-winners__desc {
+  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+  color: var(--mute);
+  line-height: 1.55;
+  flex-grow: 1;
+}
+
+.past-winners__arrow-icon {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.35s var(--ease);
+}
+
+.past-winners__action-btn:hover .past-winners__arrow-icon {
+  transform: translate(2px, -2px);
+}
+
+/* ---------------------------------------------------------------
    Events
 --------------------------------------------------------------- */
 
