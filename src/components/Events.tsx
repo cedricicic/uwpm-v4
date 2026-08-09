@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Frame, { lines, without } from "./Frame";
+import Frame from "./Frame";
+import SectionHeader from "./ui/SectionHeader";
+import DotsIndicator from "./ui/DotsIndicator";
 
 interface EventItem {
   title: string;
@@ -43,22 +45,11 @@ export default function Events() {
     <section className="section" id="events">
       <Frame at={[0, 6]} />
       <div className="container">
-        <div className="events__head inset">
-          <h2 className="heading" data-reveal>
-            Past events
-          </h2>
-          <a className="link-arrow utility" href="#events">
-            View all events
-            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path
-                d="M2 8h12M9 3l5 5-5 5"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="square"
-              />
-            </svg>
-          </a>
-        </div>
+        <SectionHeader
+          className="events__head"
+          title="Past events"
+          action={{ label: "View all events", href: "#events" }}
+        />
 
         <div className="carousel" data-reveal>
           <div
@@ -76,7 +67,7 @@ export default function Events() {
                   <h3 className="slide__title">{e.title}</h3>
                   <p className="slide__date utility">{e.date}</p>
                   <p className="body slide__copy">{e.copy}</p>
-                  <div className="arrows">
+                  <div className="arrows" style={{ display: "flex", alignItems: "center", gap: "16px" }}>
                     <button
                       className="arrow"
                       onClick={() => go(-1)}
@@ -85,6 +76,14 @@ export default function Events() {
                     >
                       <Chevron dir="left" />
                     </button>
+                    {many && (
+                      <DotsIndicator
+                        total={events.length}
+                        active={index}
+                        onSelect={setIndex}
+                        ariaLabel="Events progress"
+                      />
+                    )}
                     <button
                       className="arrow"
                       onClick={() => go(1)}
@@ -110,7 +109,6 @@ export default function Events() {
             ))}
           </div>
         </div>
-
       </div>
     </section>
   );

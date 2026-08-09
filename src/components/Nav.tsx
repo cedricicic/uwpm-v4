@@ -22,7 +22,7 @@ export default function Nav() {
   return (
     <header className="nav" data-stuck={stuck}>
       <div className="container nav__inner">
-        <a className="nav__mark" href="#home" aria-label="UWPM — home">
+        <a className="nav__mark" href="#home" aria-label="UWPM Home">
           <Image
             src="/logos/uwpm-logo.png"
             alt="UWPM"

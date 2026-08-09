@@ -31,7 +31,7 @@ const HERO_EDGE = [0];
 /**
  * The lines that would cross the headline. Drawn inside it rather than by
  * <Frame>, so each breaks at the rules above and below the type and
- * resumes past them — the grid runs around the headline, never through it.
+ * resumes past them. The grid runs around the headline, never through it.
  */
 const HERO_RAILS: number[] = [];
 

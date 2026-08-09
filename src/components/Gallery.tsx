@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useLayoutEffect, useRef } from "react";
-import Frame, { lines } from "./Frame";
+import Frame from "./Frame";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 
 /**
@@ -10,13 +10,13 @@ import { gsap, prefersReducedMotion } from "@/lib/motion";
  *
  * Each poster carries only what a designer would want to nudge: how far
  * it sits off the centre line and how far it is turned. Everything
- * structural — where it sits across the band, how fast it travels — is
+ * structural (where it sits across the band, how fast it travels) is
  * derived from its index, so adding or removing a poster re-spaces the
  * whole row instead of leaving a hole.
  */
 /** `lift` is a signed share of the band's sway, `tilt` is degrees. */
 const posters = [
-  { src: "/events/prodcon-2024.jpg", alt: "ProdCon 2024 — applications open", lift: 0.3, tilt: -6 },
+  { src: "/events/prodcon-2024.jpg", alt: "ProdCon 2024: applications open", lift: 0.3, tilt: -6 },
   { src: "/events/mocktails-and-cheese.jpg", alt: "Mocktails & Cheese product social night", lift: -1, tilt: 4 },
   { src: "/events/product-night-w24.jpg", alt: "Blueprint × UWPM Product Night", lift: 0.3, tilt: -3 },
   { src: "/events/product-night-s24.jpg", alt: "UWPM × Blueprint Product Night", lift: -0.7, tilt: 7 },

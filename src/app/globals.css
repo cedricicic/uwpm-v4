@@ -12,9 +12,11 @@
   --paper: #ffffff;
   --ink: #000000;
   --signal: #ff4d56;
+  --signal-ghost: rgba(255, 77, 86, 0.14);
   --mute: #767676;
   --rule: rgba(0, 0, 0, 0.17);
   --rule-strong: rgba(0, 0, 0, 0.3);
+  --ink-subtle: rgba(0, 0, 0, 0.05);
 
   /* The page edge: viewport to the first column line. */
   --gutter: clamp(18px, 4.2vw, 56px);
@@ -180,7 +182,6 @@ button {
   font-weight: 700;
   font-variation-settings: "wdth" 112;
   line-height: 0.94;
-  letter-spacing: -0.032em;
 }
 
 .heading {
@@ -188,14 +189,12 @@ button {
   font-weight: 600;
   font-variation-settings: "wdth" 106;
   line-height: 1;
-  letter-spacing: -0.024em;
 }
 
 .utility {
   font-size: 0.78rem;
   font-weight: 500;
   font-variation-settings: "wdth" 94;
-  letter-spacing: 0.04em;
 }
 
 /* Body copy wraps to the column that holds it, not to an arbitrary
@@ -204,6 +203,67 @@ button {
   font-size: clamp(0.95rem, 1.1vw, 1.05rem);
   color: var(--mute);
   line-height: 1.55;
+}
+
+/* Dots Indicator (§2 & §5) */
+.dots-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dots-indicator__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--rule-strong);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.3s var(--ease), transform 0.3s var(--ease);
+}
+
+.dots-indicator__dot--active {
+  background: var(--signal);
+  transform: scale(1.3);
+}
+
+/* Button Primitives */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.btn--primary {
+  background: var(--signal);
+  color: var(--paper);
+}
+
+.btn--primary:hover {
+  opacity: 0.9;
+}
+
+.btn--secondary {
+  background: var(--ink-subtle);
+  color: var(--ink);
+}
+
+.btn--outline {
+  border: 1px solid var(--rule);
+  color: var(--ink);
+}
+
+.section__kicker {
+  display: block;
+  color: var(--signal);
+  margin-bottom: 6px;
 }
 
 /* ---------------------------------------------------------------
@@ -579,6 +639,13 @@ button {
 .section__head {
   position: relative;
   z-index: 1;
+}
+
+.section__head--has-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
 }
 
 /* Rows carry the horizontal rules; the frame carries the verticals. */
@@ -1138,8 +1205,6 @@ button {
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--mute);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
   margin-bottom: 16px;
   line-height: 1.45;
 }

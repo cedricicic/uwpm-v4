@@ -3,7 +3,7 @@ export const COLUMNS = 6;
 
 /**
  * The line indices you get by dividing the six-column field evenly.
- * `lines(2)` is a three-column section, `lines(3)` a two-column one —
+ * `lines(2)` is a three-column section, `lines(3)` a two-column one.
  * both land on lines the six-column field already has.
  */
 export const lines = (step: number) =>

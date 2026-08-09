@@ -1,18 +1,15 @@
 "use client";
 
-import Image from "next/image";
 import Frame, { lines } from "./Frame";
+import SectionHeader from "./ui/SectionHeader";
+import Polaroid from "./ui/Polaroid";
 
 export default function About() {
   return (
     <section className="section about" id="about">
       <Frame at={lines(6)} />
       <div className="container">
-        <div className="section__head inset">
-          <h2 className="heading" data-reveal>
-            What we do
-          </h2>
-        </div>
+        <SectionHeader title="What we do" />
 
         <div className="about__canvas-wrap">
           <div className="about__canvas" data-reveal-group>
@@ -126,24 +123,16 @@ export default function About() {
               />
             </svg>
 
-            {/* Overlaid HTML Elements matching exact relative percentages */}
+            {/* Overlaid HTML Elements */}
 
             {/* TOP LEFT: Polaroid 1 */}
             <div className="about__node about__node--polaroid-1">
-              <div className="polaroid-wrap polaroid-wrap--tilt-left">
-                <div className="polaroid">
-                  <div className="polaroid__photo">
-                    <Image
-                      src="/about/polaroid-1.jpg"
-                      alt="UW PM execs at ProdCon ‘22!"
-                      fill
-                      sizes="380px"
-                      className="polaroid__img"
-                    />
-                  </div>
-                  <p className="polaroid__caption">UW PM execs at ProdCon ‘22!</p>
-                </div>
-              </div>
+              <Polaroid
+                src="/about/polaroid-1.jpg"
+                alt="UW PM executive team"
+                caption="UW PM execs at ProdCon 2022."
+                tilt="left"
+              />
             </div>
 
             {/* TOP RIGHT: Educate Text */}
@@ -168,38 +157,22 @@ export default function About() {
 
             {/* MIDDLE RIGHT: Polaroid 2 */}
             <div className="about__node about__node--polaroid-2">
-              <div className="polaroid-wrap polaroid-wrap--tilt-right">
-                <div className="polaroid">
-                  <div className="polaroid__photo">
-                    <Image
-                      src="/about/polaroid-2.jpg"
-                      alt="UW PM execs at ProdCon ‘22!"
-                      fill
-                      sizes="380px"
-                      className="polaroid__img"
-                    />
-                  </div>
-                  <p className="polaroid__caption">UW PM execs at ProdCon ‘22!</p>
-                </div>
-              </div>
+              <Polaroid
+                src="/about/polaroid-2.jpg"
+                alt="UW PM executive team"
+                caption="UW PM execs at ProdCon 2022."
+                tilt="right"
+              />
             </div>
 
             {/* BOTTOM LEFT: Polaroid 3 */}
             <div className="about__node about__node--polaroid-3">
-              <div className="polaroid-wrap polaroid-wrap--tilt-slight">
-                <div className="polaroid">
-                  <div className="polaroid__photo">
-                    <Image
-                      src="/about/polaroid-3.jpg"
-                      alt="UW PM execs at ProdCon ‘22!"
-                      fill
-                      sizes="380px"
-                      className="polaroid__img"
-                    />
-                  </div>
-                  <p className="polaroid__caption">UW PM execs at ProdCon ‘22!</p>
-                </div>
-              </div>
+              <Polaroid
+                src="/about/polaroid-3.jpg"
+                alt="UW PM executive team"
+                caption="UW PM execs at ProdCon 2022."
+                tilt="slight"
+              />
             </div>
 
             {/* BOTTOM RIGHT: Network Text */}

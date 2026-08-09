@@ -1,10 +1,10 @@
 import Image from "next/image";
-
 import Frame, { lines, without } from "./Frame";
+import SectionHeader from "./ui/SectionHeader";
 
-// Each logo carries its own optical height — the marks are drawn at wildly
-// different aspect ratios, so a single height would make Autodesk tower over
-// Apple. `scale` is a multiplier on --logo-unit, tuned per wordmark.
+// Each logo carries its own optical height. The marks are drawn at different
+// aspect ratios, so a single height would make Autodesk tower over Apple.
+// `scale` is a multiplier on --logo-unit, tuned per wordmark.
 const companies = [
   { name: "Salesforce", file: "salesforce.png", w: 1280, h: 896, scale: 2 },
   { name: "Meta", file: "meta.png", w: 2560, h: 1440, scale: 2 },
@@ -29,16 +29,12 @@ const companies = [
 export default function WorkedAt() {
   return (
     <section className="section worked">
-      {/* Only the section's own edges run its full height; the five interior
+      {/* Only the section's own edges run its full height. The five interior
           lines are drawn by the wall below, so none of them crosses the
           headline. */}
       <Frame at={lines(6)} />
       <div className="container">
-        <div className="section__head inset">
-          <h2 className="heading" data-reveal>
-            Our community has worked at
-          </h2>
-        </div>
+        <SectionHeader title="Our community has worked at" />
 
         <div className="worked__wall">
           <Frame at={without(lines(1), lines(6))} />

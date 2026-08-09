@@ -24,8 +24,8 @@ function colorFor(row: number) {
   const r = Math.random();
   if (r < 0.06) return "var(--ink)";
   if (r < 0.3 + 0.18 * centre) return "var(--signal)";
-  if (r < 0.72) return "rgba(255, 77, 86, 0.14)";
-  return "rgba(0, 0, 0, 0.05)";
+  if (r < 0.72) return "var(--signal-ghost)";
+  return "var(--ink-subtle)";
 }
 
 export default function BarField() {
