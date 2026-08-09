@@ -121,8 +121,8 @@ const FRAG = /* glsl */ `
 
       float targetW, targetH;
       if (canvasAspect < 1.0) {
-        // Mobile / tall viewports: fit 88% width
-        targetW = 0.88;
+        // Mobile / tall viewports: fit 96% width for slightly larger image presence
+        targetW = 0.96;
         targetH = targetW * canvasAspect / imgAspect;
       } else {
         // Desktop / wide viewports: fit height, leaning right
@@ -134,7 +134,7 @@ const FRAG = /* glsl */ `
       float xMax = canvasAspect < 1.0 ? (0.5 + targetW * 0.5) : 0.96;
       float xMin = xMax - targetW;
       
-      float yMin = 0.5 - targetH * 0.5;
+      float yMin = canvasAspect < 1.0 ? (0.54 - targetH * 0.5) : (0.5 - targetH * 0.5);
       float yMax = yMin + targetH;
 
       imgUv.x = (vUv.x - xMin) / targetW;
@@ -280,10 +280,10 @@ export default function HeroBloom() {
       const narrow = w < 760;
       // Big enough to carry the hero, but sized off the short edge too so
       // it never turns into a stripe on a tall phone.
-      uniforms.uScale.value = Math.max(w * 0.00088, h * 0.00098) * dpr;
+      uniforms.uScale.value = Math.max(w * (narrow ? 0.00102 : 0.00088), h * (narrow ? 0.00112 : 0.00098)) * dpr;
       uniforms.uOrigin.value.set(
         w * (narrow ? 0.6 : 0.71) * dpr,
-        h * (narrow ? 0.52 : 0.56) * dpr
+        h * (narrow ? 0.55 : 0.56) * dpr
       );
     };
     resize();

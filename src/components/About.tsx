@@ -19,7 +19,8 @@ export default function About() {
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               className="about__canvas-svg"
-              preserveAspectRatio="xMidYMid meet"
+              preserveAspectRatio="xMidYMin slice"
+              overflow="visible"
             >
               {/* Pink Grid 1 (Top Left) */}
               <g opacity="0.45">
@@ -93,20 +94,9 @@ export default function About() {
                 className="about__curve"
               />
 
-              {/* Dashed Connecting Curve 2 */}
+              {/* Dashed Connecting Curve 2 & 3 (Continuous journey to Hexagon) */}
               <path
-                d="M1457.14 1104.99C1346.96 1215.17 1181.6 1247.33 1033.74 1277.67C1006.63 1283.23 981.94 1287.53 956.014 1296.17"
-                stroke="var(--signal)"
-                strokeOpacity="0.85"
-                strokeWidth="4.5"
-                strokeLinecap="round"
-                strokeDasharray="10 10"
-                className="about__curve"
-              />
-
-              {/* Dashed Connecting Curve 3 */}
-              <path
-                d="M841.534 1550C840.629 1550.69 823.318 1562.56 823.642 1563.7C828.908 1582.37 843.983 1597.04 857.142 1611.29C898.637 1656.24 943.129 1696.33 997.996 1725.12C1110.37 1784.07 1238.47 1806.31 1359.14 1790"
+                d="M1457.14 1104.99C1346.96 1215.17 1181.6 1247.33 1033.74 1277.67C920 1305 850 1420 875 1550C898.637 1630 943.129 1696.33 997.996 1725.12C1110.37 1784.07 1238.47 1806.31 1359.14 1790"
                 stroke="var(--signal)"
                 strokeOpacity="0.85"
                 strokeWidth="4.5"
