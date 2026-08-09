@@ -122,7 +122,7 @@ export default function PastWinners() {
         <div className="container">
           <div className="section__head inset">
             <h2 className="heading" data-reveal>
-              Impactful projects.
+              Past winners
             </h2>
           </div>
         </div>
