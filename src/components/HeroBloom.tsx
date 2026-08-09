@@ -45,6 +45,10 @@ const FRAG = /* glsl */ `
   uniform float uIntro;
   uniform float uCell;    // device px per grain cell
 
+  uniform sampler2D uTexture;
+  uniform vec2      uImgRes;
+  uniform float     uHasTex;
+
   const float SIGMA = 28.0;
 
   // The five fills, in sRGB as authored — a raw shader writes straight
@@ -107,16 +111,92 @@ const FRAG = /* glsl */ `
     col = cluster(col, p - uB, uRotB); // lower right sits underneath
     col = cluster(col, p - uA, uRotA);
 
-    if (col.a < 0.003) discard;
+    // Aspect-ratio mapping for group photo background (right-aligned, no stretching)
+    vec2 imgUv = vUv;
+    bool inTex = false;
 
-    // Grain: white on about a quarter of the cells, held inside the
-    // shape by the shape's own alpha.
-    vec2 cell = floor(gl_FragCoord.xy / uCell);
-    float n = fract(sin(dot(cell, vec2(127.1, 311.7))) * 43758.5453);
-    float speck = step(0.34, n) * step(n, 0.58) * col.a * 0.85;
-    col = over(col, vec3(1.0), speck);
+    if (uHasTex > 0.5) {
+      float canvasAspect = uRes.x / uRes.y;
+      float imgAspect = uImgRes.x / uImgRes.y;
 
-    gl_FragColor = vec4(col.rgb, col.a * uIntro);
+      float targetW, targetH;
+      if (canvasAspect < 1.0) {
+        // Mobile / tall viewports: fit 88% width
+        targetW = 0.88;
+        targetH = targetW * canvasAspect / imgAspect;
+      } else {
+        // Desktop / wide viewports: fit height, leaning right
+        targetH = 0.78;
+        targetW = targetH * imgAspect / canvasAspect;
+      }
+
+      // Position all the way to the right with right padding
+      float xMax = canvasAspect < 1.0 ? (0.5 + targetW * 0.5) : 0.96;
+      float xMin = xMax - targetW;
+      
+      float yMin = 0.5 - targetH * 0.5;
+      float yMax = yMin + targetH;
+
+      imgUv.x = (vUv.x - xMin) / targetW;
+      imgUv.y = (vUv.y - yMin) / targetH;
+
+      if (imgUv.x >= 0.0 && imgUv.x <= 1.0 && imgUv.y >= 0.0 && imgUv.y <= 1.0) {
+        inTex = true;
+      }
+    }
+
+    vec4 texColor = vec4(0.0);
+    if (inTex) {
+      texColor = texture2D(uTexture, imgUv);
+    }
+
+    float reveal = smoothstep(0.01, 0.75, col.a);
+    float bgAlpha = inTex ? 0.05 * texColor.a : 0.0;
+    float totalAlpha = max(col.a, bgAlpha);
+
+    if (totalAlpha < 0.003) discard;
+
+    vec3 rgb = col.rgb;
+    if (inTex && texColor.a > 0.01) {
+      vec3 photoRgb = texColor.rgb;
+
+      // Lower contrast of the base image texture (compressing dynamic range toward mid-tone)
+      photoRgb = clamp((photoRgb - vec3(0.5)) * 0.65 + vec3(0.5), 0.0, 1.0);
+
+      // Gray + UWPM Red color scale ramp with lowered contrast extremes
+      float lumi = dot(photoRgb, vec3(0.2126, 0.7152, 0.0722));
+      vec3 grayColor = vec3(0.28, 0.29, 0.32);    // Softened dark slate gray
+      vec3 uwpmRed   = vec3(0.95, 0.34, 0.37);   // Softened UWPM signal red
+      vec3 highlight = vec3(0.91, 0.87, 0.88);    // Softened warm highlight
+
+      vec3 colorScaleRgb;
+      if (lumi < 0.5) {
+        colorScaleRgb = mix(grayColor, uwpmRed, lumi * 2.0);
+      } else {
+        colorScaleRgb = mix(uwpmRed, highlight, (lumi - 0.5) * 2.0);
+      }
+
+      // Stylize the group photo with the gray + UWPM red color scale
+      vec3 stylizedPhoto = mix(photoRgb, colorScaleRgb, 0.70);
+
+      vec3 hexRgb = col.rgb;
+
+      // Reveal photo inside the body of the hex bloom, blend into coral glow at edges
+      rgb = mix(hexRgb, stylizedPhoto, reveal * texColor.a * 0.88);
+
+      // Subtle ghost hint when outside active hex bloom
+      if (col.a < 0.05) {
+        rgb = mix(vec3(0.95), stylizedPhoto, 0.14);
+      }
+    }
+
+    // Grain: refined high-frequency micro-grain at native pixel resolution
+    vec2 cell = gl_FragCoord.xy;
+    float n = fract(sin(dot(cell, vec2(12.9898, 78.233))) * 43758.5453);
+    float speck = step(0.40, n) * step(n, 0.60) * totalAlpha * 0.20;
+    vec4 finalCol = over(vec4(rgb, totalAlpha), vec3(1.0), speck);
+
+    gl_FragColor = vec4(finalCol.rgb, finalCol.a * uIntro);
   }
 `;
 
@@ -129,7 +209,7 @@ export default function HeroBloom() {
 
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
     } catch {
       return; // No WebGL: the hero simply stays plain white.
     }
@@ -156,7 +236,27 @@ export default function HeroBloom() {
       uSwell: { value: 1 },
       uIntro: { value: reduced ? 1 : 0 },
       uCell: { value: dpr },
+      uTexture: { value: null as THREE.Texture | null },
+      uImgRes: { value: new THREE.Vector2(1, 1) },
+      uHasTex: { value: 0 },
     };
+
+    let loadedTexture: THREE.Texture | null = null;
+    const loader = new THREE.TextureLoader();
+    loader.load("/prodcon/24/group.webp", (tex) => {
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.minFilter = THREE.LinearFilter;
+      tex.magFilter = THREE.LinearFilter;
+      tex.generateMipmaps = true;
+      tex.needsUpdate = true;
+      loadedTexture = tex;
+      uniforms.uTexture.value = tex;
+      uniforms.uImgRes.value.set(tex.image.width, tex.image.height);
+      uniforms.uHasTex.value = 1;
+      if (reduced || !visible) {
+        renderer.render(scene, camera);
+      }
+    });
 
     const mesh = new THREE.Mesh(
       new THREE.PlaneGeometry(2, 2),
@@ -317,6 +417,7 @@ export default function HeroBloom() {
       el.removeEventListener("pointerleave", onLeave);
       mesh.geometry.dispose();
       (mesh.material as THREE.Material).dispose();
+      if (loadedTexture) loadedTexture.dispose();
       renderer.dispose();
       if (renderer.domElement.parentNode === el) {
         el.removeChild(renderer.domElement);
